@@ -1,0 +1,31 @@
+header {
+    background-color: black;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    color: white;
+    display: flex;
+    align-items: center;
+}
+#food{
+    margin: 0px;
+    margin-left: 40px;
+}
+nav {
+    margin-left: auto;
+    align-items: center;
+    display: flex;
+    gap: 75px;
+    margin-right: 50px;
+}
+#home {
+    border: none;
+    border-radius: 0px;
+    padding: 0px;
+    background-color: transparent;
+}
+#home :active{
+    color: white;
+}
+#home :hover{
+    color: white;
+}
