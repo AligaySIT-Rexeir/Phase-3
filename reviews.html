@@ -3,9 +3,246 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>All Reviews - Foodie Reviews Baguio</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    Nothing
+
+<header>
+    <h1 class="logo">Foodie Reviews</h1>
+    
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="reviews.html" class="active">Reviews</a>
+        <a href="top-picks.html">Hidden Gems</a>
+        <a href="contact.html">Contact</a>
+    </nav>
+    
+    <form class="search-bar" role="search" onsubmit="handleSearch(event)">
+        <i class="fas fa-search"></i>
+        <input type="search" id="globalSearch" placeholder="Search dishes or spots..." aria-label="Search">
+    </form> 
+</header>
+
+<main>
+
+<section class="interface">
+    <h2>Honest Reviews from Baguio Foodies</h2>
+    <p>Real opinions • Real flavors • Updated weekly</p>
+</section>
+
+<section style="padding: 50px 30px; background: #f9f9f9;">
+
+    <section style="max-width: 1280px; margin: 0 auto;">
+
+        <section class="controls">
+            <p><strong id="resultCount">Showing 8 reviews</strong></p>
+            
+            <select id="sortSelect" style="padding: 10px 16px; border-radius: 30px; border: 1px solid #ddd;">
+                <option value="newest">Newest First</option>
+                <option value="rating">Highest Rated</option>
+                <option value="price-low">Price: Low to High</option>
+            </select>
+        </section>
+
+        <nav class="filters" style="margin-bottom: 40px;">
+            <span class="filter-tag active" data-filter="all">All</span>
+            <span class="filter-tag" data-filter="hearty">Ilocano / Hearty</span>
+            <span class="filter-tag" data-filter="sweet">Dessert</span>
+            <span class="filter-tag" data-filter="spicy">Spicy</span>
+            <span class="filter-tag" data-filter="street">Street Food</span>
+        </nav>
+
+        <section class="review-grid" id="reviewGrid"></section>
+        <section class="no-results" id="noResults">
+            <h3>No reviews found 😕</h3>
+            <p>Try changing your search or filter</p>
+        </section>
+        <section style="text-align: center; margin-top: 60px;">
+            <button id="loadMoreBtn" class="pindutin secondary">Load More Reviews</button>
+        </section>
+
+    </section>
+</section>
+
+</main>
+
+<footer>
+    <p>© 2026 Foodie Reviews • Made with ❤️ for food lovers in Baguio City &amp; Cordillera</p>
+</footer>
+
+<script>
+const reviews = [
+    {
+        id: 1,
+        title: "SLOT",
+        location: "SLOT",
+        price: 0,
+        rating: 4.9,
+        category: "hearty",
+        image: "SLOT",
+        text: "SLOT",
+        date: "2 days ago"
+    },
+    {
+        id: 2,
+        title: "SLOT",
+        location: "SLOT",
+        price: 0,
+        rating: 4.8,
+        category: "sweet",
+        image: "SLOT",
+        text: "SLOT",
+        date: "5 days ago"
+    },
+    {
+        id: 3,
+        title: "Spice Haven Biryani",
+        location: "Mabini Street",
+        price: 250,
+        rating: 4.7,
+        category: "spicy",
+        image: "images/Biryani.jpg",
+        text: "Authentic spices and generous portions.",
+        date: "1 week ago"
+    },
+    {
+        id: 4,
+        title: "Zark's Burgers Sulit",
+        location: "SM City Baguio",
+        price: 195,
+        rating: 4.9,
+        category: "hearty",
+        image: "images/Zark_s Burger.jpg",
+        text: "Juicy and always sulit!",
+        date: "3 days ago"
+    },
+    {
+        id: 5,
+        title: "Choco Donuts",
+        location: "Magsasay",
+        price: 75,
+        rating: 4.6,
+        category: "sweet",
+        image: "images/Donut.jpg",
+        text: "Soft and perfectly chocolatey.",
+        date: "2 weeks ago"
+    }
+];
+
+let currentFilter = 'all';
+let displayedCount = 6;
+
+const reviewGrid = document.getElementById('reviewGrid');
+const searchInput = document.getElementById('globalSearch');
+const sortSelect = document.getElementById('sortSelect');
+const resultCount = document.getElementById('resultCount');
+const noResults = document.getElementById('noResults');
+const loadMoreBtn = document.getElementById('loadMoreBtn');
+
+function renderReviews(filteredReviews) {
+    reviewGrid.innerHTML = '';
+    
+    const toShow = filteredReviews.slice(0, displayedCount);
+    
+    toShow.forEach(review => {
+        const cardHTML = `
+            <article class="card">
+                <figure class="image-container">
+                    <img src="${review.image}" alt="${review.title}">
+                    <figcaption class="flavor-badges">
+                        <span class="badge ${review.category}">
+                            ${review.category === 'sweet' ? 'Sweet' : review.category === 'spicy' ? 'Spicy' : 'Hearty'}
+                        </span>
+                    </figcaption>
+                </figure>
+                <section class="card-content">
+                    <h3>${review.title}</h3>
+                    <p class="rating">★★★★★ <span>${review.rating}</span></p>
+                    <p style="color:#ff5722; font-weight:bold;">₱${review.price} • ${review.location}</p>
+                    <p>${review.text}</p>
+                    <small style="color:#666;">Reviewed ${review.date}</small>
+                </section>
+            </article>
+        `;
+        reviewGrid.innerHTML += cardHTML;
+    });
+
+    resultCount.textContent = `Showing ${toShow.length} of ${filteredReviews.length} reviews`;
+    noResults.style.display = filteredReviews.length === 0 ? 'block' : 'none';
+    loadMoreBtn.style.display = displayedCount < filteredReviews.length ? 'inline-block' : 'none';
+}
+
+function filterReviews() {
+    let filtered = reviews;
+
+    const searchTerm = searchInput.value.toLowerCase();
+
+    if (searchTerm) {
+        filtered = filtered.filter(r => 
+            r.title.toLowerCase().includes(searchTerm) || 
+            r.text.toLowerCase().includes(searchTerm)
+        );
+    }
+
+    if (currentFilter !== 'all') {
+        filtered = filtered.filter(r => r.category === currentFilter);
+    }
+
+    if (sortSelect.value === 'rating') {
+        filtered.sort((a, b) => b.rating - a.rating);
+    } else if (sortSelect.value === 'price-low') {
+        filtered.sort((a, b) => a.price - b.price);
+    }
+
+    displayedCount = 6;
+    renderReviews(filtered);
+}
+
+document.querySelectorAll('.filter-tag').forEach(tag => {
+    tag.addEventListener('click', () => {
+        document.querySelectorAll('.filter-tag').forEach(t => t.classList.remove('active'));
+        tag.classList.add('active');
+        currentFilter = tag.dataset.filter;
+        filterReviews();
+    });
+});
+
+searchInput.addEventListener('input', filterReviews);
+sortSelect.addEventListener('change', filterReviews);
+
+loadMoreBtn.addEventListener('click', () => {
+    displayedCount += 4;
+    filterReviews();
+});
+
+function handleSearch(e) {
+    e.preventDefault();
+
+    const query = searchInput.value.trim().toLowerCase();
+
+    if (!query) {
+        alert("Please enter a search term.");
+        return;
+    }
+
+    const match = reviews.some(r =>
+        r.title.toLowerCase().includes(query) ||
+        r.text.toLowerCase().includes(query)
+    );
+
+    if (match) {
+        filterReviews();
+        document.getElementById('reviewGrid').scrollIntoView({ behavior: "smooth" });
+    } else {
+        noResults.style.display = 'block';
+        reviewGrid.innerHTML = '';
+        resultCount.textContent = "0 results found";
+    }
+}
+
+renderReviews(reviews);
+</script>
+
 </body>
 </html>

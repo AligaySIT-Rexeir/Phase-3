@@ -13,17 +13,9 @@
         <nav>
             <a href="index.html" class="active">Home</a>
             <a href="reviews.html">Reviews</a>
-            <a href="top-picks.html">Flavor Trails</a>
+            <a href="top-picks.html">Hidden Gems</a>
             <a href="contact.html">Contact</a>
         </nav>
-        
-        <span class="header-right">
-            <span class="search-bar">
-                <i class="fas fa-search"></i>
-                <input type="text" placeholder="Search dishes or spots..." aria-label="Search">
-            </span>
-            <span class="location">📍 Baguio City</span>
-        </span>
     </header>
 
 <main>
@@ -117,5 +109,34 @@
     <footer>
         <p>© 2026 Foodie Reviews • Made with ❤️ for food lovers in Central Luzon</p>
     </footer>
+
+    <script>
+function handleSearch(e) {
+    e.preventDefault();
+
+    const query = document.getElementById('globalSearch').value.trim().toLowerCase();
+
+    if (!query) {
+        alert("Please enter a search term.");
+        return;
+    }
+
+    const allItems = [
+        "spice haven biryani",
+        "zark's burgers sulit",
+        "choco drizzle donuts",
+        "choco donuts"
+    ];
+
+    const found = allItems.find(item => item.includes(query));
+
+    if (found) {
+        window.location.href = "reviews.html?search=" + encodeURIComponent(query);
+    } else {
+        alert("No results found. Try another keyword.");
+    }
+}
+</script>
+
 </body>
 </html>

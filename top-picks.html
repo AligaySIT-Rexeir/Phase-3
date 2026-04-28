@@ -3,9 +3,177 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Hidden Gems - Foodie Reviews Baguio</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    Nothing
+
+<header>
+    <h1 class="logo">Foodie Reviews</h1>
+    
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="reviews.html">Reviews</a>
+        <a href="top-picks.html" class="active">Hidden Gems</a>
+        <a href="contact.html">Contact</a>
+    </nav>
+    
+   <form class="search-bar" role="search" onsubmit="handleSearch(event)">
+        <i class="fas fa-search"></i>
+        <input type="search" id="globalSearch" placeholder="Search dishes or spots..." aria-label="Search">
+    </form>
+</header>
+
+<main>
+
+<section class="gems-1">
+    <h2>Hidden Gems</h2>
+    <p class="subtitle">Local secrets. Not on tourist maps. Worth every bite.</p>
+</section>
+<section style="background: #f9f9f9; padding: 20px 30px 60px;">
+    <section style="max-width: 1280px; margin: 0 auto;">
+        <section style="text-align: center; margin-bottom: 40px;">
+            <nav class="filters" style="display: inline-flex; gap: 12px; flex-wrap: wrap; justify-content: center;">
+                <span class="filter-tag active" data-filter="all">All Gems</span>
+                <span class="filter-tag" data-filter="ilocano">Ilocano</span>
+                <span class="filter-tag" data-filter="street">Street Food</span>
+                <span class="filter-tag" data-filter="mountain">Mountain</span>
+                <span class="filter-tag" data-filter="dessert">Dessert</span>
+            </nav>
+        </section>
+        <section class="gems-grid" id="gemsGrid"></section>
+    </section>
+</section>
+
+</main>
+
+<footer>
+    <p>© 2026 Foodie Reviews • Made with ❤️ for food lovers in Baguio City &amp; Cordillera</p>
+</footer>
+
+<script>
+const gems = [
+    {
+        title: "Nothing Yet",
+        category: "ilocano",
+        location: "Nothing Yet",
+        rating: 4.9,
+        price: "₱120-250",
+        image: "Nothing Yet",
+        desc: "Nothing Yet",
+        secret: "Nothing Yet"
+    },
+    {
+        title: "Nothing Yet",
+        category: "ilocano",
+        location: "Nothing Yet",
+        rating: 4.9,
+        price: "₱120-250",
+        image: "Nothing Yet",
+        desc: "Nothing Yet",
+        secret: "Nothing Yet"
+    },
+    {
+        title: "Nothing Yet",
+        category: "ilocano",
+        location: "Nothing Yet",
+        rating: 4.9,
+        price: "₱120-250",
+        image: "Nothing Yet",
+        desc: "Nothing Yet",
+        secret: "Nothing Yet"
+    }
+];
+
+const gemsGrid = document.getElementById('gemsGrid');
+const searchInput = document.getElementById('globalSearch');
+
+function renderGems(filteredGems) {
+    gemsGrid.innerHTML = '';
+
+    filteredGems.forEach(gem => {
+        const card = `
+            <article class="gem-card card">
+                <figure class="image-container">
+                    <img src="${gem.image}" alt="${gem.title}">
+                </figure>
+
+                <section class="gem-content">
+                    <span class="gem-badge">Hidden Gem</span>
+                    <h3>${gem.title}</h3>
+
+                    <p class="rating">★★★★★ <span>${gem.rating}</span></p>
+
+                    <p class="gem-meta">
+                        📍 ${gem.location} • ${gem.price}
+                    </p>
+
+                    <p>${gem.desc}</p>
+                    <p class="secret">🔒 Secret: ${gem.secret}</p>
+                </section>
+            </article>
+        `;
+        gemsGrid.innerHTML += card;
+    });
+}
+
+function filterGems() {
+    const term = searchInput.value.toLowerCase();
+
+    const activeFilterElement = document.querySelector('.filter-tag.active');
+    const activeFilter = activeFilterElement ? activeFilterElement.dataset.filter : 'all';
+
+    let filtered = gems;
+
+    if (term) {
+        filtered = filtered.filter(g =>
+            g.title.toLowerCase().includes(term) ||
+            g.desc.toLowerCase().includes(term)
+        );
+    }
+
+    if (activeFilter !== 'all') {
+        filtered = filtered.filter(g => g.category === activeFilter);
+    }
+
+    renderGems(filtered);
+}
+
+document.querySelectorAll('.filter-tag').forEach(tag => {
+    tag.addEventListener('click', () => {
+        document.querySelectorAll('.filter-tag').forEach(t => t.classList.remove('active'));
+        tag.classList.add('active');
+        filterGems();
+    });
+});
+
+searchInput.addEventListener('input', filterGems);
+
+renderGems(gems);
+
+function handleSearch(e) {
+    e.preventDefault();
+
+    const query = searchInput.value.trim().toLowerCase();
+
+    if (!query) {
+        alert("Please enter a search term.");
+        return;
+    }
+
+    const match = gems.some(g =>
+        g.title.toLowerCase().includes(query) ||
+        g.desc.toLowerCase().includes(query)
+    );
+
+    if (match) {
+        filterGems();
+        document.getElementById('gemsGrid').scrollIntoView({ behavior: "smooth" });
+    } else {
+        gemsGrid.innerHTML = '';
+        gemsGrid.innerHTML = `<p style="text-align:center; padding:20px;">No results found 😕</p>`;
+    }
+}
+</script>
 </body>
 </html>

@@ -3,9 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Contact - Foodie Reviews Baguio</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    Nothing
+
+<header>
+    <h1 class="logo">Foodie Reviews</h1>
+    
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="reviews.html">Reviews</a>
+        <a href="top-picks.html">Hidden Gems</a>
+        <a href="contact.html" class="active">Contact</a>
+    </nav>
+
+  <form class="search-bar" role="search" onsubmit="handleSearch(event)">
+    <i class="fas fa-search"></i>
+    <input type="search" id="globalSearch" placeholder="Search dishes or spots..." aria-label="Search">
+</form>
+</header>
+
+<main>
+
+<section class="contact-hero">
+    <h2>Contact Us</h2>
+    <p class="subtitle">Got a recommendation? A question? Let’s talk.</p>
+</section>
+
+<section class="contact-section">
+
+    <section class="contact-container">
+
+        <aside class="contact-info">
+            <h3>Get in Touch</h3>
+            <p>We’d love to hear your food discoveries, suggestions, or feedback.</p>
+
+            <p><strong>📍 Location:</strong> Baguio City</p>
+            <p><strong>📧 Email:</strong> foodiereviews@email.com</p>
+            <p><strong>📱 Phone:</strong> +63 912 345 6789</p>
+        </aside>
+
+        <form class="contact-form">
+
+            <label>
+                <input type="text" placeholder="Your Name" required>
+            </label>
+
+            <label>
+                <input type="email" placeholder="Your Email" required>
+            </label>
+
+            <label>
+                <input type="text" placeholder="Subject">
+            </label>
+
+            <label>
+                <textarea rows="5" placeholder="Your Message..." required></textarea>
+            </label>
+
+            <button type="submit" class="pindutin">Send Message</button>
+
+        </form>
+
+    </section>
+
+</section>
+
+</main>
+
+<footer>
+    <p>© 2026 Foodie Reviews • Made with ❤️ for food lovers in Baguio City &amp; Cordillera</p>
+</footer>
+
+<script>
+function handleSearch(e) {
+    e.preventDefault();
+
+    const query = document.getElementById('globalSearch').value.trim().toLowerCase();
+
+    if (!query) {
+        alert("Please enter a search term.");
+        return;
+    }
+
+    const allItems = [
+        "spice haven biryani",
+        "zark's burgers sulit",
+        "choco drizzle donuts",
+        "choco donuts"
+    ];
+
+    const found = allItems.find(item => item.includes(query));
+
+    if (found) {
+        window.location.href = "reviews.html?search=" + encodeURIComponent(query);
+    } else {
+        alert("No results found. Try another keyword.");
+    }
+}
+</script>
+
 </body>
 </html>
